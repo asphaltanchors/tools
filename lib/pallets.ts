@@ -30,15 +30,6 @@ export const PALLET_SPECS: PalletSpec[] = [
     tareWeightLb: 45,
     notes: "Use for square footprint loads.",
   },
-  {
-    id: "euro-1200x1000",
-    name: "EURO 1200 × 1000",
-    footprintIn: { length: 47.2, width: 39.4 },
-    baseHeightIn: 5.7,
-    maxLoadHeightIn: 59,
-    tareWeightLb: 50,
-    notes: "Metric footprint; verify trailer clearance.",
-  },
 ];
 
-export const DEFAULT_PALLET_ID = "gma-48x48";
+export const DEFAULT_PALLET_ID = "gma-48x40";
