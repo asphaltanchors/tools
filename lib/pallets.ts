@@ -41,4 +41,4 @@ export const PALLET_SPECS: PalletSpec[] = [
   },
 ];
 
-export const DEFAULT_PALLET_ID = PALLET_SPECS[0]?.id ?? "";
+export const DEFAULT_PALLET_ID = "gma-48x48";

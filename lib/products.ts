@@ -15,18 +15,18 @@ export type Product = {
 
 export const PRODUCTS: Product[] = [
   {
-    id: "sp10",
-    name: "Asphalt Anchors SP10",
-    sku: "SP10L",
+    id: "sp10l",
+    name: "SP10 Case",
+    sku: "01-6310.72L",
     caseWeightLb: 18.37,
     caseDimensionsIn: { length: 13.4, width: 8.3, height: 8 },
     cartonsPerLayer: 15,
     maxLayers: 7,
   },
   {
-    id: "sp12",
-    name: "Asphalt Anchors SP12",
-    sku: "SP12L",
+    id: "sp12l",
+    name: "SP12 Case",
+    sku: "01-6312.72L",
     caseWeightLb: 30.58,
     caseDimensionsIn: { length: 14.4, width: 13.4, height: 8 },
     cartonsPerLayer: 9,
@@ -34,7 +34,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "sp18",
-    name: "Asphalt Anchors SP18",
+    name: "SP18",
     sku: "SP18L",
     caseWeightLb: 35.42,
     caseDimensionsIn: { length: 14.6, width: 14, height: 8.3 },
@@ -43,7 +43,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "sp58",
-    name: "Asphalt Anchors SP58",
+    name: "SP58",
     sku: "SP58L",
     caseWeightLb: 38.5,
     caseDimensionsIn: { length: 15.7, width: 13, height: 7.9 },
@@ -52,7 +52,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "ak4",
-    name: "Asphalt Anchors AK-4",
+    name: "AK-4",
     sku: "AK4",
     caseWeightLb: 48,
     caseDimensionsIn: { length: 18, width: 17, height: 14 },
@@ -61,7 +61,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "eak4",
-    name: "Asphalt Anchors eAK-4",
+    name: "eAK-4",
     sku: "eAK4",
     caseWeightLb: 50,
     caseDimensionsIn: { length: 18, width: 14, height: 12 },
