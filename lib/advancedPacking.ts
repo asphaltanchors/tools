@@ -434,7 +434,7 @@ function tryMixedPatternPacking(boxL: number, boxW: number, palletL: number, pal
   } else {
     // General mixed pattern approach
     // Try to find the best combination of normal and rotated boxes
-    let bestConfig = { normal: 0, rotated: 0, boxes: [] as PackedBox[] };
+    const bestConfig = { normal: 0, rotated: 0, boxes: [] as PackedBox[] };
 
     // Calculate how many fit in pure orientations
     const normalPerRow = Math.floor(palletL / boxL);
@@ -442,12 +442,12 @@ function tryMixedPatternPacking(boxL: number, boxW: number, palletL: number, pal
     const rotatedPerRow = Math.floor(palletL / boxW);
     const rotatedPerCol = Math.floor(palletW / boxL);
 
-    const pureNormal = normalPerRow * normalPerCol;
-    const pureRotated = rotatedPerRow * rotatedPerCol;
+    // const pureNormal = normalPerRow * normalPerCol;
+    // const pureRotated = rotatedPerRow * rotatedPerCol;
 
     // Try different mixed configurations
     // Configuration 1: Fill with normal, then add rotated in remaining space
-    let config1Boxes: PackedBox[] = [];
+    const config1Boxes: PackedBox[] = [];
     let x = 0, y = 0;
 
     // Place normal orientation boxes
@@ -474,7 +474,7 @@ function tryMixedPatternPacking(boxL: number, boxW: number, palletL: number, pal
     }
 
     // Configuration 2: Fill with rotated, then add normal in remaining space
-    let config2Boxes: PackedBox[] = [];
+    const config2Boxes: PackedBox[] = [];
     x = 0; y = 0;
 
     // Place rotated boxes
