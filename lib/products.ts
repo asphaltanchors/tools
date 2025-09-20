@@ -21,7 +21,7 @@ export const PRODUCTS: Product[] = [
     caseWeightLb: 17,
     caseDimensionsIn: { length: 13.4, width: 8.26, height: 8 },
     cartonsPerLayer: 15,
-    maxLayers: 7,
+    maxLayers: 99,
   },
   {
     id: "sp12l",
