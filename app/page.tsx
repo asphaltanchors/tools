@@ -40,7 +40,7 @@ export default function Home() {
   const [lineCounter, setLineCounter] = useState(1);
   const [attempted, setAttempted] = useState(false);
   const [selectedPalletId, setSelectedPalletId] = useState(DEFAULT_PALLET_ID);
-  const [mixingMode, setMixingMode] = useState<"single" | "mixed">("single");
+  const [mixingMode, setMixingMode] = useState<"single" | "mixed">("mixed");
   const [calculation, setCalculation] = useState<
     ReturnType<typeof calculatePalletBreakdown> | null
   >(null);
@@ -123,21 +123,21 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-100 py-8">
+    <main className="min-h-screen bg-white py-8">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4">
-        <header className="space-y-3">
+        <header className="space-y-4 border-b border-gray-200 pb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold font-mono text-slate-900 tracking-tight">
+              <h1 className="text-3xl font-bold font-mono text-black tracking-tight">
                 PALLET//CALC
               </h1>
-              <p className="text-sm text-slate-600 font-mono mt-1">
-                Technical shipment calculator
+              <p className="text-sm text-gray-600 font-mono mt-1 tracking-wide">
+                TECHNICAL SHIPMENT CALCULATOR
               </p>
             </div>
             <div className="text-right">
-              <p className="text-xs font-mono text-slate-500 uppercase tracking-wider">
-                Pallet Type
+              <p className="text-xs font-mono text-gray-500 uppercase tracking-wider mb-1">
+                PALLET TYPE
               </p>
               <Select
                 value={selectedPalletId}
@@ -145,7 +145,7 @@ export default function Home() {
                   setSelectedPalletId(value);
                 }}
               >
-                <SelectTrigger className="w-32 h-8 text-xs font-mono bg-slate-100 border-slate-300">
+                <SelectTrigger className="w-40 h-10 text-xs font-mono bg-white border-2 border-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-offset-1 focus:ring-gray-900">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -158,42 +158,49 @@ export default function Home() {
               </Select>
             </div>
           </div>
-          <fieldset className="flex items-center gap-6 text-xs">
-            <legend className="font-mono text-slate-600 uppercase tracking-wide mr-2">Mode:</legend>
-            <label className="inline-flex items-center gap-1.5 font-mono text-slate-700">
-              <input
-                type="radio"
-                name="pallet-mixing-mode"
-                value="single"
-                checked={mixingMode === "single"}
-                onChange={() => setMixingMode("single")}
-                className="h-3 w-3 border-slate-400 text-slate-800"
+          <div className="flex items-center gap-3 text-xs">
+            <span className="font-mono text-gray-700 uppercase tracking-wider font-semibold">MODE:</span>
+            <button
+              type="button"
+              onClick={() => setMixingMode(mixingMode === "single" ? "mixed" : "single")}
+              className="relative inline-flex h-8 w-[130px] items-center rounded bg-gray-100 border-2 border-gray-900 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+              role="switch"
+              aria-checked={mixingMode === "mixed"}
+              aria-label="Toggle between Single-SKU and Mixed-SKU modes"
+            >
+              <span className="sr-only">Toggle pallet mixing mode</span>
+              <span
+                className={`${
+                  mixingMode === "mixed" ? "translate-x-[65px]" : "translate-x-0"
+                } inline-block h-8 w-[65px] transform bg-black transition-transform duration-200 ease-in-out absolute`}
               />
-              Single-SKU
-            </label>
-            <label className="inline-flex items-center gap-1.5 font-mono text-slate-700">
-              <input
-                type="radio"
-                name="pallet-mixing-mode"
-                value="mixed"
-                checked={mixingMode === "mixed"}
-                onChange={() => setMixingMode("mixed")}
-                className="h-3 w-3 border-slate-400 text-slate-800"
-              />
-              Mixed-SKU
-            </label>
-          </fieldset>
+              <span
+                className={`${
+                  mixingMode === "single" ? "text-white" : "text-gray-700"
+                } absolute left-0 w-[65px] font-mono text-[11px] font-bold uppercase transition-colors duration-200 pointer-events-none tracking-wider z-10 flex items-center justify-center h-full`}
+              >
+                SINGLE
+              </span>
+              <span
+                className={`${
+                  mixingMode === "mixed" ? "text-white" : "text-gray-700"
+                } absolute left-[65px] w-[65px] font-mono text-[11px] font-bold uppercase transition-colors duration-200 pointer-events-none tracking-wider z-10 flex items-center justify-center h-full`}
+              >
+                MIXED
+              </span>
+            </button>
+          </div>
         </header>
 
 
-        <section className="rounded-lg border-2 border-slate-300 bg-white">
-          <div className="border-b-2 border-slate-200 px-4 py-3 bg-slate-50">
-            <h2 className="text-sm font-mono font-bold text-slate-900 uppercase tracking-wider">
-              INPUT: Product Quantities [Cases]
+        <section className="border-2 border-gray-900 bg-white">
+          <div className="border-b-2 border-gray-900 px-4 py-3 bg-gray-50">
+            <h2 className="text-sm font-mono font-bold text-black uppercase tracking-wider">
+              INPUT: PRODUCT QUANTITIES [CASES]
             </h2>
           </div>
 
-          <div className="flex flex-col gap-3 px-4 py-4">
+          <div className="flex flex-col gap-3 px-4 py-4 bg-white">
             {lineItems.map((item) => {
               const product = productsById.get(item.productId) ?? PRODUCTS[0];
               const capacity = palletSpec
@@ -207,12 +214,12 @@ export default function Home() {
               return (
                 <div
                   key={item.id}
-                  className="flex flex-col gap-3 rounded border border-slate-300 bg-slate-50 p-3 md:flex-row md:items-start"
+                  className="flex flex-col gap-3 border border-gray-400 bg-gray-50 p-3 md:flex-row md:items-start"
                 >
                   <div className="flex flex-1 flex-col gap-2">
                     <span
                       id={`${item.id}-product-label`}
-                      className="text-xs font-mono font-semibold text-slate-700 uppercase"
+                      className="text-xs font-mono font-bold text-gray-700 uppercase tracking-wider"
                     >
                       SKU
                     </span>
@@ -226,7 +233,7 @@ export default function Home() {
                     >
                       <SelectTrigger
                         aria-labelledby={`${item.id}-product-label`}
-                        className="w-full"
+                        className="w-full h-10 bg-white font-mono text-sm border-2 border-gray-300 hover:border-gray-900 focus:ring-2 focus:ring-gray-900"
                       >
                         <SelectValue placeholder="Choose a product" />
                       </SelectTrigger>
@@ -243,20 +250,20 @@ export default function Home() {
                     </Select>
                     <dl className="grid grid-cols-4 gap-2 text-xs font-mono">
                       <div>
-                        <dt className="font-semibold text-slate-700">Cases/layer</dt>
-                        <dd className="text-slate-900 font-bold">{casesPerLayer || "—"}</dd>
+                        <dt className="font-semibold text-gray-600 uppercase">Cases/L</dt>
+                        <dd className="text-black font-bold">{casesPerLayer || "—"}</dd>
                       </div>
                       <div>
-                        <dt className="font-semibold text-slate-700">Layers/pallet</dt>
-                        <dd className="text-slate-900 font-bold">{maxLayers || "—"}</dd>
+                        <dt className="font-semibold text-gray-600 uppercase">Layers</dt>
+                        <dd className="text-black font-bold">{maxLayers || "—"}</dd>
                       </div>
                       <div>
-                        <dt className="font-semibold text-slate-700">Cases/pallet</dt>
-                        <dd className="text-slate-900 font-bold">{casesPerPallet || "—"}</dd>
+                        <dt className="font-semibold text-gray-600 uppercase">Total</dt>
+                        <dd className="text-black font-bold">{casesPerPallet || "—"}</dd>
                       </div>
                       <div>
-                        <dt className="font-semibold text-slate-700">Height</dt>
-                        <dd className="text-slate-900 font-bold">
+                        <dt className="font-semibold text-gray-600 uppercase">Height</dt>
+                        <dd className="text-black font-bold">
                           {fullHeight ? `${Math.round(fullHeight)}"` : "—"}
                         </dd>
                       </div>
@@ -264,7 +271,7 @@ export default function Home() {
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs font-mono font-semibold text-slate-700 uppercase">
+                    <label className="text-xs font-mono font-bold text-gray-700 uppercase tracking-wider">
                       QTY
                     </label>
                     <input
@@ -272,7 +279,7 @@ export default function Home() {
                       min={0}
                       step={1}
                       inputMode="numeric"
-                      className="w-24 h-10 rounded border-2 border-slate-400 bg-white px-2 text-lg font-mono font-bold text-slate-900 text-center focus:border-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-800"
+                      className="w-24 h-10 border-2 border-gray-900 bg-white px-2 text-lg font-mono font-bold text-black text-center focus:border-black focus:outline-none focus:ring-2 focus:ring-gray-900"
                       value={item.quantity}
                       onChange={(event) => {
                         const nextValue = Number(event.target.value);
@@ -285,7 +292,7 @@ export default function Home() {
                     />
                     <button
                       type="button"
-                      className="text-xs font-mono font-medium text-red-700 hover:text-red-800 uppercase"
+                      className="text-xs font-mono font-bold text-red-600 hover:text-red-800 uppercase tracking-wider"
                       onClick={() => removeLineItem(item.id)}
                     >
                       DEL
@@ -295,17 +302,17 @@ export default function Home() {
               );
             })}
 
-            <div className="flex items-center justify-between pt-2 border-t border-slate-200">
+            <div className="flex items-center justify-between pt-3 border-t-2 border-gray-300">
               <button
                 type="button"
-                className="text-xs font-mono font-bold text-slate-600 hover:text-slate-800 uppercase tracking-wide"
+                className="text-xs font-mono font-bold text-black hover:text-gray-700 uppercase tracking-wider border-2 border-black px-3 py-1.5 hover:bg-gray-100 transition-colors"
                 onClick={handleAddLine}
               >
                 [+] ADD SKU
               </button>
               <button
                 type="button"
-                className="rounded bg-slate-800 px-6 py-2 text-sm font-mono font-bold text-white hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-600 disabled:cursor-not-allowed disabled:bg-slate-400 uppercase tracking-wide"
+                className="bg-black px-6 py-2 text-sm font-mono font-bold text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 disabled:cursor-not-allowed disabled:bg-gray-400 uppercase tracking-wider transition-colors"
                 onClick={handleCalculate}
                 disabled={!canCalculate}
               >
@@ -315,33 +322,33 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-lg border-2 border-slate-400 bg-white">
-          <div className="border-b-2 border-slate-300 px-4 py-3 bg-slate-100">
+        <section className="border-2 border-gray-900 bg-white">
+          <div className="border-b-2 border-gray-900 px-4 py-3 bg-gray-50">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-mono font-bold text-slate-900 uppercase tracking-wider">
-                OUTPUT: Calculation Results
+              <h2 className="text-sm font-mono font-bold text-black uppercase tracking-wider">
+                OUTPUT: CALCULATION RESULTS
               </h2>
-              <div className="text-xs font-mono text-slate-700">
+              <div className="text-xs font-mono text-gray-700">
                 PALLET: <span className="font-bold">{palletSpec?.name ?? "—"}</span>
               </div>
             </div>
             {palletSpec && (
-              <dl className="grid grid-cols-4 gap-3 mt-2 text-xs font-mono text-slate-600">
+              <dl className="grid grid-cols-4 gap-3 mt-2 text-xs font-mono text-gray-600">
                 <div>
-                  <dt className="font-bold">FOOTPRINT</dt>
-                  <dd className="font-mono">{Math.round(palletSpec.footprintIn.length)} × {Math.round(palletSpec.footprintIn.width)}&quot;</dd>
+                  <dt className="font-bold uppercase">Footprint</dt>
+                  <dd className="font-mono text-black">{Math.round(palletSpec.footprintIn.length)} × {Math.round(palletSpec.footprintIn.width)}&quot;</dd>
                 </div>
                 <div>
-                  <dt className="font-bold">MAX_H</dt>
-                  <dd className="font-mono">{Math.round(palletSpec.maxLoadHeightIn)}&quot;</dd>
+                  <dt className="font-bold uppercase">Max H</dt>
+                  <dd className="font-mono text-black">{Math.round(palletSpec.maxLoadHeightIn)}&quot;</dd>
                 </div>
                 <div>
-                  <dt className="font-bold">BASE_H</dt>
-                  <dd className="font-mono">{Math.round(palletSpec.baseHeightIn)}&quot;</dd>
+                  <dt className="font-bold uppercase">Base H</dt>
+                  <dd className="font-mono text-black">{Math.round(palletSpec.baseHeightIn)}&quot;</dd>
                 </div>
                 <div>
-                  <dt className="font-bold">TARE</dt>
-                  <dd className="font-mono">{Math.round(palletSpec.tareWeightLb)} lb</dd>
+                  <dt className="font-bold uppercase">Tare</dt>
+                  <dd className="font-mono text-black">{Math.round(palletSpec.tareWeightLb)} lb</dd>
                 </div>
               </dl>
             )}
@@ -349,39 +356,39 @@ export default function Home() {
 
           <div className="px-4 py-4">
             {!attempted && (
-              <p className="text-sm font-mono text-slate-600 text-center py-4">
-                [NO DATA] - Enter quantities and execute calculation
+              <p className="text-sm font-mono text-gray-500 text-center py-8 uppercase tracking-wider">
+                [NO DATA] — ENTER QUANTITIES AND EXECUTE CALCULATION
               </p>
             )}
 
             {attempted && !calculation && (
-              <p className="text-sm font-mono text-amber-700 text-center py-4">
-                [ERROR] - At least one product quantity required
+              <p className="text-sm font-mono text-red-600 text-center py-8 uppercase tracking-wider font-bold">
+                [ERROR] — AT LEAST ONE PRODUCT QUANTITY REQUIRED
               </p>
             )}
 
             {calculation && calculation.summary.totalPallets > 0 && (
               <div className="flex flex-col gap-4">
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="rounded border-2 border-slate-600 bg-slate-800 p-4 text-center">
-                    <p className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+                  <div className="border-2 border-gray-900 bg-black p-4 text-center">
+                    <p className="text-xs font-mono font-bold text-gray-300 uppercase tracking-wider">
                       PALLETS
                     </p>
                     <p className="text-4xl font-mono font-black text-white">
                       {calculation.summary.totalPallets}
                     </p>
                   </div>
-                  <div className="rounded border-2 border-slate-600 bg-slate-800 p-4 text-center">
-                    <p className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
-                      WEIGHT_LB
+                  <div className="border-2 border-gray-900 bg-black p-4 text-center">
+                    <p className="text-xs font-mono font-bold text-gray-300 uppercase tracking-wider">
+                      WEIGHT
                     </p>
                     <p className="text-3xl font-mono font-black text-white">
                       {Math.round(calculation.summary.totalWeightLb).toLocaleString("en-US")} lb
                     </p>
                   </div>
-                  <div className="rounded border-2 border-slate-600 bg-slate-800 p-4 text-center">
-                    <p className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
-                      MAX_H_IN
+                  <div className="border-2 border-gray-900 bg-black p-4 text-center">
+                    <p className="text-xs font-mono font-bold text-gray-300 uppercase tracking-wider">
+                      MAX HEIGHT
                     </p>
                     <p className="text-3xl font-mono font-black text-white">
                       {Math.round(calculation.summary.tallestPalletHeightIn)}&quot;
@@ -398,35 +405,35 @@ export default function Home() {
                     });
 
                     return (
-                      <table className="min-w-full divide-y-2 divide-slate-300 text-left text-xs font-mono border border-slate-300">
-                        <thead className="bg-slate-200">
+                      <table className="min-w-full divide-y-2 divide-gray-300 text-left text-xs font-mono border-2 border-gray-300">
+                        <thead className="bg-gray-100">
                           <tr>
-                            <th className="px-3 py-2 font-bold text-slate-800 text-left uppercase">
+                            <th className="px-3 py-2 font-bold text-black text-left uppercase tracking-wider">
                               SKU
                             </th>
-                            <th className="px-3 py-2 font-bold text-slate-800 text-center uppercase">
+                            <th className="px-3 py-2 font-bold text-black text-center uppercase tracking-wider">
                               Cases
                             </th>
-                            <th className="px-3 py-2 font-bold text-slate-800 text-center uppercase">
+                            <th className="px-3 py-2 font-bold text-black text-center uppercase tracking-wider">
                               Pallets
                             </th>
-                            <th className="px-3 py-2 font-bold text-slate-800 text-center uppercase">
-                              Full layers
+                            <th className="px-3 py-2 font-bold text-black text-center uppercase tracking-wider">
+                              Full Layers
                             </th>
-                            <th className="px-3 py-2 font-bold text-slate-800 text-center uppercase">
-                              Top layer
+                            <th className="px-3 py-2 font-bold text-black text-center uppercase tracking-wider">
+                              Top Layer
                             </th>
-                            <th className="px-3 py-2 font-bold text-slate-800 text-center uppercase">
+                            <th className="px-3 py-2 font-bold text-black text-center uppercase tracking-wider">
                               Weight
                             </th>
                             {hasStatusMessages && (
-                              <th className="px-3 py-2 font-bold text-slate-800 text-left uppercase">
+                              <th className="px-3 py-2 font-bold text-black text-left uppercase tracking-wider">
                                 Status
                               </th>
                             )}
                           </tr>
                         </thead>
-                    <tbody className="divide-y divide-slate-200 bg-white">
+                    <tbody className="divide-y divide-gray-200 bg-white">
                       {calculation.breakdowns.map((breakdown) => {
                         const { capacity } = breakdown;
 
@@ -443,12 +450,12 @@ export default function Home() {
 
 
                         return (
-                          <tr key={breakdown.product.id} className="hover:bg-slate-50">
+                          <tr key={breakdown.product.id} className="hover:bg-gray-50">
                             <td className="px-3 py-2">
-                              <div className="font-bold text-slate-900">
+                              <div className="font-bold text-black">
                                 {breakdown.product.sku}
                               </div>
-                              <div className="text-xs text-slate-600">
+                              <div className="text-xs text-gray-600">
                                 {breakdown.product.name}
                               </div>
                             </td>
@@ -498,13 +505,13 @@ export default function Home() {
                         return (
                           <div
                             key={palletDetail.id}
-                            className="rounded border border-slate-400 bg-slate-50 p-3"
+                            className="border-2 border-gray-300 bg-white p-3"
                           >
                             <div className="flex items-center justify-between mb-2">
-                              <div className="text-sm font-mono font-bold text-slate-900">
+                              <div className="text-sm font-mono font-bold text-black uppercase">
                                 P{palletDetail.id.toString().padStart(2, '0')}
                               </div>
-                              <div className="text-xs font-mono text-slate-700">
+                              <div className="text-xs font-mono text-gray-700">
                                 {dimensionText} | {weightText} | {casesText}
                               </div>
                             </div>
@@ -522,9 +529,9 @@ export default function Home() {
                                 return (
                                   <div
                                     key={`${palletDetail.id}-${productAllocation.product.id}`}
-                                    className="flex justify-between text-slate-800"
+                                    className="flex justify-between text-gray-800"
                                   >
-                                    <span className="font-bold">
+                                    <span className="font-bold text-black">
                                       {productAllocation.product.sku}
                                     </span>
                                     <span>
