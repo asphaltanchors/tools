@@ -1,5 +1,6 @@
 import { PalletSpec } from "./pallets";
 import { Product } from "./products";
+import { advancedPack, simpleGridPack, PackedBox } from "./advancedPacking";
 
 export type ProductSelectionInput = {
   product: Product;
@@ -11,6 +12,8 @@ export type ProductCapacity = {
   maxLayers: number;
   casesPerPallet: number;
   fullPalletHeightIn: number;
+  packingLayout?: PackedBox[];
+  packingEfficiency?: number;
 };
 
 export type ProductPartialLayer = {
@@ -58,13 +61,34 @@ const deriveCapacity = (product: Product, pallet: PalletSpec): ProductCapacity =
   const { caseDimensionsIn } = product;
   const { footprintIn, baseHeightIn, maxLoadHeightIn } = pallet;
 
-  const orientationA =
-    Math.floor(footprintIn.length / caseDimensionsIn.length) *
-    Math.floor(footprintIn.width / caseDimensionsIn.width);
-  const orientationB =
-    Math.floor(footprintIn.length / caseDimensionsIn.width) *
-    Math.floor(footprintIn.width / caseDimensionsIn.length);
-  const geometryCasesPerLayer = Math.max(orientationA, orientationB, 0);
+  // Try advanced packing first
+  const advancedResult = advancedPack(
+    {
+      length: caseDimensionsIn.length,
+      width: caseDimensionsIn.width,
+      height: caseDimensionsIn.height,
+    },
+    {
+      length: footprintIn.length,
+      width: footprintIn.width,
+    }
+  );
+
+  // Fallback to simple grid calculation
+  const simpleResult = simpleGridPack(
+    {
+      length: caseDimensionsIn.length,
+      width: caseDimensionsIn.width,
+      height: caseDimensionsIn.height,
+    },
+    {
+      length: footprintIn.length,
+      width: footprintIn.width,
+    }
+  );
+
+  // Use the better result, but respect manual overrides
+  const geometryCasesPerLayer = Math.max(advancedResult.totalBoxes, simpleResult.totalBoxes);
   const manualLimit = product.cartonsPerLayer ?? geometryCasesPerLayer;
   const casesPerLayer = Math.max(
     0,
@@ -96,6 +120,8 @@ const deriveCapacity = (product: Product, pallet: PalletSpec): ProductCapacity =
     maxLayers,
     casesPerPallet,
     fullPalletHeightIn,
+    packingLayout: advancedResult.totalBoxes === casesPerLayer ? advancedResult.boxes : undefined,
+    packingEfficiency: Math.max(advancedResult.efficiency, simpleResult.efficiency),
   };
 };
 
