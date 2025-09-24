@@ -21,7 +21,7 @@ export interface BaseProduct {
 
 export interface CalculatorResult {
   success: boolean;
-  summary: Record<string, any>;
-  details?: any;
+  summary: Record<string, unknown>;
+  details?: unknown;
   errors?: string[];
 }
