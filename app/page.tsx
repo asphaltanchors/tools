@@ -4,7 +4,14 @@
 "use client";
 
 import Link from "next/link";
-import { Package, FenceIcon, QrCode, Calculator, TrendingUp, Activity } from "lucide-react";
+import {
+  Package,
+  FenceIcon,
+  QrCode,
+  Calculator,
+  TrendingUp,
+  Activity,
+} from "lucide-react";
 
 export default function Home() {
   return (
@@ -24,8 +31,12 @@ export default function Home() {
           <div className="bg-white border-2 border-gray-900 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-mono text-gray-600 uppercase tracking-wider">Active Tools</p>
-                <p className="text-2xl font-mono font-bold text-black mt-1">1</p>
+                <p className="text-xs font-mono text-gray-600 uppercase tracking-wider">
+                  Active Tools
+                </p>
+                <p className="text-2xl font-mono font-bold text-black mt-1">
+                  2
+                </p>
               </div>
               <Activity className="h-8 w-8 text-gray-400" />
             </div>
@@ -33,8 +44,12 @@ export default function Home() {
           <div className="bg-white border-2 border-gray-900 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-mono text-gray-600 uppercase tracking-wider">Coming Soon</p>
-                <p className="text-2xl font-mono font-bold text-black mt-1">2</p>
+                <p className="text-xs font-mono text-gray-600 uppercase tracking-wider">
+                  Coming Soon
+                </p>
+                <p className="text-2xl font-mono font-bold text-black mt-1">
+                  1
+                </p>
               </div>
               <TrendingUp className="h-8 w-8 text-gray-400" />
             </div>
@@ -42,8 +57,12 @@ export default function Home() {
           <div className="bg-white border-2 border-gray-900 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-mono text-gray-600 uppercase tracking-wider">Total Calcs</p>
-                <p className="text-2xl font-mono font-bold text-black mt-1">—</p>
+                <p className="text-xs font-mono text-gray-600 uppercase tracking-wider">
+                  Total Calcs
+                </p>
+                <p className="text-2xl font-mono font-bold text-black mt-1">
+                  —
+                </p>
               </div>
               <Calculator className="h-8 w-8 text-gray-400" />
             </div>
@@ -51,7 +70,9 @@ export default function Home() {
           <div className="bg-black border-2 border-gray-900 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">Status</p>
+                <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                  Status
+                </p>
                 <p className="text-sm font-mono font-bold text-green-500 mt-1 flex items-center gap-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                   ONLINE
@@ -86,7 +107,9 @@ export default function Home() {
                 </p>
                 <div className="flex items-center justify-between text-xs font-mono text-gray-500">
                   <span>v2.1.0</span>
-                  <span className="text-black font-bold group-hover:underline">LAUNCH →</span>
+                  <span className="text-black font-bold group-hover:underline">
+                    LAUNCH →
+                  </span>
                 </div>
               </Link>
 
@@ -114,23 +137,25 @@ export default function Home() {
 
               <Link
                 href="/tools/barcode"
-                className="group bg-white border-2 border-gray-900 rounded-lg p-6 transition-all hover:shadow-lg hover:scale-[1.02] opacity-75"
+                className="group bg-white border-2 border-gray-900 rounded-lg p-6 transition-all hover:shadow-lg hover:scale-[1.02]"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <QrCode className="h-8 w-8 text-gray-500" />
-                  <span className="text-xs font-mono font-bold text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
-                    SOON
+                  <QrCode className="h-8 w-8 text-gray-700 group-hover:text-black" />
+                  <span className="text-xs font-mono font-bold text-green-600 bg-green-100 px-2 py-1 rounded">
+                    ACTIVE
                   </span>
                 </div>
                 <h3 className="text-xl font-mono font-bold text-black mb-2">
-                  BARCODE//GEN
+                  Barcode
                 </h3>
                 <p className="text-sm font-mono text-gray-600 mb-4">
-                  Generate Code 128, QR codes, and other barcode formats
+                  Generate ITF-14 barcodes with bearer bars for GS1 case codes
                 </p>
                 <div className="flex items-center justify-between text-xs font-mono text-gray-500">
-                  <span>v0.1.0</span>
-                  <span className="font-bold">IN DEV</span>
+                  <span>v1.0.0</span>
+                  <span className="text-black font-bold group-hover:underline">
+                    LAUNCH →
+                  </span>
                 </div>
               </Link>
             </div>
@@ -147,23 +172,46 @@ export default function Home() {
                   <div className="flex items-center justify-between py-2 border-b border-gray-200">
                     <div className="flex items-center gap-3">
                       <span className="text-xs text-gray-500">2024.09.24</span>
-                      <span className="text-black font-medium">System initialized</span>
+                      <span className="text-black font-medium">
+                        System initialized
+                      </span>
                     </div>
-                    <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">SYSTEM</span>
+                    <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                      SYSTEM
+                    </span>
                   </div>
                   <div className="flex items-center justify-between py-2 border-b border-gray-200">
                     <div className="flex items-center gap-3">
                       <span className="text-xs text-gray-500">2024.09.24</span>
-                      <span className="text-black font-medium">Navigation sidebar added</span>
+                      <span className="text-black font-medium">
+                        Navigation sidebar added
+                      </span>
                     </div>
-                    <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">UI</span>
+                    <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                      UI
+                    </span>
                   </div>
                   <div className="flex items-center justify-between py-2">
                     <div className="flex items-center gap-3">
                       <span className="text-xs text-gray-500">2024.09.24</span>
-                      <span className="text-black font-medium">Pallet calculator deployed</span>
+                      <span className="text-black font-medium">
+                        Pallet calculator deployed
+                      </span>
                     </div>
-                    <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">FEATURE</span>
+                    <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                      FEATURE
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-2">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-gray-500">2024.09.24</span>
+                      <span className="text-black font-medium">
+                        ITF-14 barcode generator launched
+                      </span>
+                    </div>
+                    <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                      FEATURE
+                    </span>
                   </div>
                 </div>
               </div>

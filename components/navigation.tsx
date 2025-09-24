@@ -27,13 +27,13 @@ const navigationItems = [
     category: "CALCULATORS",
     items: [
       {
-        name: "PALLET//CALC",
+        name: "PALLET CALC",
         href: "/calculators/pallet",
         icon: Package,
         status: "active",
       },
       {
-        name: "FENCE//CALC",
+        name: "FENCE CALC",
         href: "/calculators/fence",
         icon: FenceIcon,
         status: "coming-soon",
@@ -62,10 +62,10 @@ const navigationItems = [
     category: "TOOLS",
     items: [
       {
-        name: "BARCODE//GEN",
+        name: "Barcode Generator",
         href: "/tools/barcode",
         icon: QrCode,
-        status: "coming-soon",
+        status: "active",
       },
       {
         name: "SPEC//SHEET",
@@ -102,11 +102,16 @@ const navigationItems = [
 
 export function Navigation() {
   const pathname = usePathname();
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(["CALCULATORS", "TOOLS"]);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([
+    "CALCULATORS",
+    "TOOLS",
+  ]);
 
   const toggleCategory = (category: string) => {
     setExpandedCategories((prev) =>
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category],
     );
   };
 
@@ -130,7 +135,10 @@ export function Navigation() {
 
       <div className="px-4 pb-4 space-y-3">
         {navigationItems.map((section) => (
-          <div key={section.category} className="bg-black rounded border border-gray-800">
+          <div
+            key={section.category}
+            className="bg-black rounded border border-gray-800"
+          >
             <button
               onClick={() => toggleCategory(section.category)}
               className="flex items-center justify-between w-full px-4 py-3 text-left hover:bg-gray-950 rounded-t transition-colors"
@@ -141,7 +149,9 @@ export function Navigation() {
               <ChevronDown
                 className={cn(
                   "h-4 w-4 transition-transform text-gray-500",
-                  expandedCategories.includes(section.category) ? "rotate-180" : ""
+                  expandedCategories.includes(section.category)
+                    ? "rotate-180"
+                    : "",
                 )}
               />
             </button>
@@ -160,8 +170,12 @@ export function Navigation() {
                         className="flex items-center gap-3 px-3 py-2.5 rounded opacity-30 cursor-not-allowed"
                       >
                         <item.icon className="h-4 w-4 flex-shrink-0 text-gray-600" />
-                        <div className="font-mono text-sm text-gray-600">{item.name}</div>
-                        <span className="ml-auto text-xs font-mono text-gray-700">[PLANNED]</span>
+                        <div className="font-mono text-sm text-gray-600">
+                          {item.name}
+                        </div>
+                        <span className="ml-auto text-xs font-mono text-gray-700">
+                          [PLANNED]
+                        </span>
                       </div>
                     );
                   }
@@ -174,18 +188,24 @@ export function Navigation() {
                         "flex items-center gap-3 px-3 py-2.5 rounded transition-all duration-200 group",
                         isActive
                           ? "bg-gray-800 text-white border border-gray-700"
-                          : "hover:bg-gray-950 text-gray-400 hover:text-white"
+                          : "hover:bg-gray-950 text-gray-400 hover:text-white",
                       )}
                     >
                       <item.icon
                         className={cn(
                           "h-4 w-4 flex-shrink-0",
-                          isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"
+                          isActive
+                            ? "text-white"
+                            : "text-gray-500 group-hover:text-gray-300",
                         )}
                       />
-                      <div className="font-mono text-sm font-medium">{item.name}</div>
+                      <div className="font-mono text-sm font-medium">
+                        {item.name}
+                      </div>
                       {isComingSoon && (
-                        <span className="ml-auto text-xs font-mono text-gray-500">[SOON]</span>
+                        <span className="ml-auto text-xs font-mono text-gray-500">
+                          [SOON]
+                        </span>
                       )}
                     </Link>
                   );
