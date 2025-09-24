@@ -4,6 +4,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { QrCode, Download, AlertCircle, Check, Package } from "lucide-react";
 import { generateBarcodeAction, calculateCheckDigit, calculateSSCCCheckDigit, type BarcodeType } from "./actions";
 
@@ -14,7 +15,6 @@ export default function BarcodeGenerator() {
   const [barcodeImage, setBarcodeImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");
-  const [includeBearerBars, setIncludeBearerBars] = useState(true);
   const [barcodeType, setBarcodeType] = useState<BarcodeType>('CODE128');
 
   // Validate barcode based on type
@@ -82,8 +82,7 @@ export default function BarcodeGenerator() {
     try {
       // Call server action to generate barcode
       const result = await generateBarcodeAction(cleaned, {
-        type: barcodeType,
-        includeBearerBars
+        type: barcodeType
       });
 
       if (result.success) {
@@ -309,10 +308,13 @@ export default function BarcodeGenerator() {
               <div className="flex items-center justify-center min-h-[300px] bg-white rounded border-2 border-dashed border-gray-300">
                 {barcodeImage ? (
                   <div className="text-center">
-                    <img
+                    <Image
                       src={barcodeImage}
                       alt="Generated ITF-14 Barcode"
+                      width={400}
+                      height={200}
                       className="max-w-full h-auto"
+                      unoptimized
                     />
                     <p className="mt-4 text-xs font-mono text-gray-600">
                       Code: {generatedCode}

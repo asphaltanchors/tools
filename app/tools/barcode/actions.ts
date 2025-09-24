@@ -45,7 +45,7 @@ export async function generateBarcodeAction(text: string, options?: {
     }
 
     // Configure barcode options based on type
-    const barcodeOptions: any = {
+    const barcodeOptions: Record<string, unknown> = {
       text: cleanText,
       scale: options?.scale ?? 3,
       height: options?.height ?? 30,
@@ -72,7 +72,7 @@ export async function generateBarcodeAction(text: string, options?: {
     const svg = await new Promise<string>((resolve, reject) => {
       bwipjs.toBuffer(
         barcodeOptions,
-        (err: any, png: Buffer) => {
+        (err: Error | null, png: Buffer) => {
           if (err) {
             reject(err);
           } else {
@@ -91,11 +91,11 @@ export async function generateBarcodeAction(text: string, options?: {
       code: cleanText
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Barcode generation error:', error);
     return {
       success: false,
-      error: error?.message || 'Failed to generate barcode'
+      error: error instanceof Error ? error.message : 'Failed to generate barcode'
     };
   }
 }
