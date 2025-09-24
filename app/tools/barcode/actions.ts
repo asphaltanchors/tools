@@ -66,6 +66,9 @@ export async function generateBarcodeAction(text: string, options?: {
     } else if (barcodeType === 'CODE128') {
       barcodeOptions.bcid = 'code128';
       barcodeOptions.text = cleanText; // Use original text for Code 128
+      // Adjust scale and height for better aspect ratio on Code 128
+      barcodeOptions.scale = options?.scale ?? 2; // Slightly smaller scale
+      barcodeOptions.height = options?.height ?? 15; // Much shorter height
     }
 
     // Generate SVG barcode
