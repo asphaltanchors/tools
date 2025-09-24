@@ -3,7 +3,7 @@
 
 'use server';
 
-import bwipjs from 'bwip-js';
+import bwipjs, { type RenderOptions } from 'bwip-js/node';
 
 export type BarcodeType = 'ITF14' | 'GS1128' | 'CODE128';
 
@@ -45,7 +45,8 @@ export async function generateBarcodeAction(text: string, options?: {
     }
 
     // Configure barcode options based on type
-    const barcodeOptions: Record<string, unknown> = {
+    const barcodeOptions: RenderOptions = {
+      bcid: '', // Will be set below based on barcode type
       text: cleanText,
       scale: options?.scale ?? 3,
       height: options?.height ?? 30,
@@ -75,7 +76,7 @@ export async function generateBarcodeAction(text: string, options?: {
     const svg = await new Promise<string>((resolve, reject) => {
       bwipjs.toBuffer(
         barcodeOptions,
-        (err: Error | null, png: Buffer) => {
+        (err: string | Error, png: Buffer) => {
           if (err) {
             reject(err);
           } else {

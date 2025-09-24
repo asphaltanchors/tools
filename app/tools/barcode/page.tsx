@@ -85,7 +85,7 @@ export default function BarcodeGenerator() {
         type: barcodeType
       });
 
-      if (result.success) {
+      if (result.success && result.barcode) {
         setBarcodeImage(result.barcode);
         setGeneratedCode(result.code || cleaned);
         setSuccess(true);
