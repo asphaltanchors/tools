@@ -36,7 +36,7 @@ const navigationItems = [
         name: "FENCE CALC",
         href: "/calculators/fence",
         icon: FenceIcon,
-        status: "coming-soon",
+        status: "active",
       },
       {
         name: "CONCRETE//MIX",
@@ -62,7 +62,7 @@ const navigationItems = [
     category: "TOOLS",
     items: [
       {
-        name: "Barcode Generator",
+        name: "BARCODE GEN",
         href: "/tools/barcode",
         icon: QrCode,
         status: "active",
