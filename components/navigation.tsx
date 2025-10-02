@@ -222,7 +222,7 @@ export function Navigation() {
             <div className="flex justify-between">
               <span>Build</span>
               <span className="text-gray-400 font-bold">
-                {new Date().toISOString().split("T")[0].replace(/-/g, "")}
+                {process.env.NEXT_PUBLIC_BUILD_DATE || new Date().toISOString().split("T")[0].replace(/-/g, "")}
               </span>
             </div>
             <div className="flex items-center gap-2 pt-1">
