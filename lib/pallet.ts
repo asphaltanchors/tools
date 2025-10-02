@@ -89,7 +89,7 @@ const deriveCapacity = (product: Product, pallet: PalletSpec): ProductCapacity =
 
   // Use the better result, but respect manual overrides
   const geometryCasesPerLayer = Math.max(advancedResult.totalBoxes, simpleResult.totalBoxes);
-  const manualLimit = product.cartonsPerLayer ?? geometryCasesPerLayer;
+  const manualLimit = geometryCasesPerLayer;
   const casesPerLayer = Math.max(
     0,
     Math.min(geometryCasesPerLayer, Math.floor(manualLimit)),
@@ -104,10 +104,7 @@ const deriveCapacity = (product: Product, pallet: PalletSpec): ProductCapacity =
 
   const maxLayers = Math.max(
     0,
-    Math.min(
-      maxLayersByHeight,
-      product.maxLayers ?? maxLayersByHeight,
-    ),
+    maxLayersByHeight,
   );
 
   const casesPerPallet = casesPerLayer * maxLayers;
@@ -131,6 +128,7 @@ export const calculatePalletBreakdown = (
   pallet: PalletSpec,
   options?: {
     allowMixing?: boolean;
+    maxWeightLb?: number;
   },
 ): {
   breakdowns: ProductPalletBreakdown[];
@@ -138,6 +136,7 @@ export const calculatePalletBreakdown = (
   summary: PalletizationSummary;
 } => {
   const allowMixing = options?.allowMixing ?? false;
+  const maxWeightLb = options?.maxWeightLb;
 
   type PalletLoad = {
     id: number;
@@ -234,6 +233,7 @@ export const calculatePalletBreakdown = (
   ): PalletLoad | null => {
     const { product, capacity } = allocation;
     const layerHeight = product.caseDimensionsIn.height;
+    const layerWeight = capacity.casesPerLayer * product.caseWeightLb;
 
     let best: { pallet: PalletLoad; remainingHeight: number } | null = null;
 
@@ -257,6 +257,11 @@ export const calculatePalletBreakdown = (
 
       const nextHeight = palletLoad.height + layerHeight;
       if (nextHeight > pallet.maxLoadHeightIn) {
+        continue;
+      }
+
+      const nextWeight = palletLoad.weightLb + layerWeight;
+      if (maxWeightLb !== undefined && nextWeight > maxWeightLb) {
         continue;
       }
 
@@ -348,6 +353,11 @@ export const calculatePalletBreakdown = (
           continue;
         }
 
+        const nextWeight = palletLoad.weightLb + cases * caseWeight;
+        if (maxWeightLb !== undefined && nextWeight > maxWeightLb) {
+          continue;
+        }
+
         palletLoad.partialLayer = {
           entries: [
             {
@@ -391,6 +401,11 @@ export const calculatePalletBreakdown = (
       const heightWithoutPartial = palletLoad.height - currentPartialHeight;
       const prospectiveHeight = heightWithoutPartial + newPartialHeight;
       if (prospectiveHeight > pallet.maxLoadHeightIn) {
+        continue;
+      }
+
+      const nextWeight = palletLoad.weightLb + cases * caseWeight;
+      if (maxWeightLb !== undefined && nextWeight > maxWeightLb) {
         continue;
       }
 

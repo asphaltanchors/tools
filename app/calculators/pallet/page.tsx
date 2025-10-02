@@ -41,6 +41,7 @@ export default function PalletCalculator() {
   const [attempted, setAttempted] = useState(false);
   const [selectedPalletId, setSelectedPalletId] = useState(DEFAULT_PALLET_ID);
   const [mixingMode, setMixingMode] = useState<"single" | "mixed">("mixed");
+  const [maxWeightLb, setMaxWeightLb] = useState(1600);
   const [calculation, setCalculation] = useState<
     ReturnType<typeof calculatePalletBreakdown> | null
   >(null);
@@ -118,6 +119,7 @@ export default function PalletCalculator() {
     setCalculation(
       calculatePalletBreakdown(selection, palletSpec, {
         allowMixing,
+        maxWeightLb,
       }),
     );
   };
@@ -136,26 +138,49 @@ export default function PalletCalculator() {
               </p>
             </div>
             <div className="text-right">
-              <p className="text-xs font-mono text-gray-500 uppercase tracking-wider mb-1">
-                PALLET TYPE
-              </p>
-              <Select
-                value={selectedPalletId}
-                onValueChange={(value) => {
-                  setSelectedPalletId(value);
-                }}
-              >
-                <SelectTrigger className="w-40 h-10 text-xs font-mono bg-white border-2 border-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-offset-1 focus:ring-gray-900">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {PALLET_SPECS.map((spec) => (
-                    <SelectItem key={spec.id} value={spec.id} className="font-mono text-xs">
-                      {spec.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex gap-4 mb-1">
+                <p className="text-xs font-mono text-gray-500 uppercase tracking-wider w-40">
+                  PALLET TYPE
+                </p>
+                <p className="text-xs font-mono text-gray-500 uppercase tracking-wider w-28">
+                  MAX WEIGHT
+                </p>
+              </div>
+              <div className="flex gap-4 items-center">
+                <Select
+                  value={selectedPalletId}
+                  onValueChange={(value) => {
+                    setSelectedPalletId(value);
+                  }}
+                >
+                  <SelectTrigger className="w-40 h-10 py-0 text-xs font-mono bg-white border-2 border-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-offset-1 focus:ring-gray-900">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PALLET_SPECS.map((spec) => (
+                      <SelectItem key={spec.id} value={spec.id} className="font-mono text-xs">
+                        {spec.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <input
+                  type="number"
+                  min={0}
+                  step={50}
+                  inputMode="numeric"
+                  className="w-28 h-10 border-2 border-gray-900 bg-white px-3 text-sm font-mono font-bold text-black text-center focus:border-black focus:outline-none focus:ring-2 focus:ring-gray-900"
+                  value={maxWeightLb}
+                  onChange={(event) => {
+                    const nextValue = Number(event.target.value);
+                    setMaxWeightLb(
+                      Number.isFinite(nextValue) && nextValue >= 0
+                        ? Math.floor(nextValue)
+                        : 0
+                    );
+                  }}
+                />
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-3 text-xs">
@@ -193,9 +218,9 @@ export default function PalletCalculator() {
         </header>
 
 
-        <section className="border-2 border-gray-900 bg-white rounded-lg shadow-sm">
-          <div className="border-b-2 border-gray-900 px-4 py-3 bg-gray-50">
-            <h2 className="text-sm font-mono font-bold text-black uppercase tracking-wider">
+        <section className="border-2 border-gray-900 bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="border-b-2 border-gray-900 py-3 bg-gray-50">
+            <h2 className="text-sm font-mono font-bold text-black uppercase tracking-wider px-4">
               INPUT: PRODUCT QUANTITIES [CASES]
             </h2>
           </div>
@@ -233,7 +258,7 @@ export default function PalletCalculator() {
                     >
                       <SelectTrigger
                         aria-labelledby={`${item.id}-product-label`}
-                        className="w-full h-10 bg-white font-mono text-sm border-2 border-gray-300 hover:border-gray-900 focus:ring-2 focus:ring-gray-900"
+                        className="w-full h-10 py-0 bg-white font-mono text-sm border-2 border-gray-300 hover:border-gray-900 focus:ring-2 focus:ring-gray-900"
                       >
                         <SelectValue placeholder="Choose a product" />
                       </SelectTrigger>
@@ -279,7 +304,7 @@ export default function PalletCalculator() {
                       min={0}
                       step={1}
                       inputMode="numeric"
-                      className="w-24 h-10 border-2 border-gray-900 bg-white px-2 text-lg font-mono font-bold text-black text-center focus:border-black focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      className="w-24 h-10 border-2 border-gray-900 bg-white px-3 text-lg font-mono font-bold text-black text-center focus:border-black focus:outline-none focus:ring-2 focus:ring-gray-900"
                       value={item.quantity}
                       onChange={(event) => {
                         const nextValue = Number(event.target.value);
@@ -322,9 +347,9 @@ export default function PalletCalculator() {
           </div>
         </section>
 
-        <section className="border-2 border-gray-900 bg-white rounded-lg shadow-sm">
-          <div className="border-b-2 border-gray-900 px-4 py-3 bg-gray-50">
-            <div className="flex items-center justify-between">
+        <section className="border-2 border-gray-900 bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="border-b-2 border-gray-900 py-3 bg-gray-50">
+            <div className="flex items-center justify-between px-4">
               <h2 className="text-sm font-mono font-bold text-black uppercase tracking-wider">
                 OUTPUT: CALCULATION RESULTS
               </h2>
@@ -333,7 +358,7 @@ export default function PalletCalculator() {
               </div>
             </div>
             {palletSpec && (
-              <dl className="grid grid-cols-4 gap-3 mt-2 text-xs font-mono text-gray-600">
+              <dl className="grid grid-cols-5 gap-3 mt-2 text-xs font-mono text-gray-600 px-4">
                 <div>
                   <dt className="font-bold uppercase">Footprint</dt>
                   <dd className="font-mono text-black">{Math.round(palletSpec.footprintIn.length)} × {Math.round(palletSpec.footprintIn.width)}&quot;</dd>
@@ -349,6 +374,10 @@ export default function PalletCalculator() {
                 <div>
                   <dt className="font-bold uppercase">Tare</dt>
                   <dd className="font-mono text-black">{Math.round(palletSpec.tareWeightLb)} lb</dd>
+                </div>
+                <div>
+                  <dt className="font-bold uppercase">Max Weight</dt>
+                  <dd className="font-mono text-black">{maxWeightLb} lb</dd>
                 </div>
               </dl>
             )}
