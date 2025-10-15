@@ -29,6 +29,13 @@ export const PRODUCTS: Product[] = [
     caseDimensionsIn: { length: 13.4, width: 8.26, height: 8 },
   },
   {
+    id: "sp10l",
+    name: "SP10 Case 72 pack",
+    sku: "01-6310.72L",
+    caseWeightLb: 23.5,
+    caseDimensionsIn: { length: 14, width: 8.5, height: 7 },
+  },
+  {
     id: "sp12k",
     name: "SP12 Case 9 6-Packs",
     sku: "01-6315.38K",
