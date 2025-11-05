@@ -92,6 +92,13 @@ export const PRODUCTS: Product[] = [
     caseDimensionsIn: { length: 17, width: 17, height: 8.25 },
   },
   {
+    id: "epxbags",
+    name: "EPX2 6x12oz Bags",
+    sku: "82-5002.K",
+    caseWeightLb: 36,
+    caseDimensionsIn: { length: 13, width: 10, height: 10 },
+  },
+  {
     id: "epx3t",
     name: "EPX3 Case 12 Cartridges",
     sku: "82-6002",
