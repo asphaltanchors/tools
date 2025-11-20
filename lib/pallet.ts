@@ -144,7 +144,7 @@ export const calculatePalletBreakdown = (
     weightLb: number;
     perProductLayers: Map<string, number>;
     fullLayerCounts: Map<string, number>;
-    partialLayer?: {
+    partialLayers: Array<{
       entries: Array<{
         productId: string;
         cases: number;
@@ -153,7 +153,7 @@ export const calculatePalletBreakdown = (
       }>;
       usage: number;
       height: number;
-    };
+    }>;
   };
 
   type Allocation = {
@@ -223,6 +223,7 @@ export const calculatePalletBreakdown = (
       weightLb: pallet.tareWeightLb,
       perProductLayers: new Map(),
       fullLayerCounts: new Map(),
+      partialLayers: [],
     };
     pallets.push(palletLoad);
     return palletLoad;
@@ -238,7 +239,7 @@ export const calculatePalletBreakdown = (
     let best: { pallet: PalletLoad; remainingHeight: number } | null = null;
 
     for (const palletLoad of pallets) {
-      if (palletLoad.partialLayer) {
+      if (palletLoad.partialLayers.length > 0) {
         continue;
       }
 
@@ -347,9 +348,31 @@ export const calculatePalletBreakdown = (
         continue;
       }
 
-      if (!palletLoad.partialLayer) {
-        const nextHeight = palletLoad.height + layerHeight;
-        if (nextHeight > pallet.maxLoadHeightIn) {
+      // 1. Try to fit into an existing partial layer (horizontal mixing)
+      let placedInExisting = false;
+      for (const partial of palletLoad.partialLayers) {
+        if (partial.entries.some((entry) => entry.productId === product.id)) {
+          continue; // Already has this product in this layer
+        }
+
+        if (!allowMixing) {
+          continue;
+        }
+
+        const nextUsage = casesPerLayer > 0
+          ? partial.usage + cases / casesPerLayer
+          : partial.usage + 1;
+
+        if (nextUsage > 1 + 1e-6) {
+          continue; // Won't fit in this layer
+        }
+
+        // Check if increasing this layer's height (if needed) would exceed max height
+        const currentPartialHeight = partial.height;
+        const newPartialHeight = Math.max(currentPartialHeight, layerHeight);
+        const heightIncrease = newPartialHeight - currentPartialHeight;
+
+        if (palletLoad.height + heightIncrease > pallet.maxLoadHeightIn) {
           continue;
         }
 
@@ -358,49 +381,33 @@ export const calculatePalletBreakdown = (
           continue;
         }
 
-        palletLoad.partialLayer = {
-          entries: [
-            {
-              productId: product.id,
-              cases,
-              casesPerLayer,
-              caseHeight: layerHeight,
-            },
-          ],
-          usage: casesPerLayer > 0 ? cases / casesPerLayer : 1,
-          height: layerHeight,
-        };
-        palletLoad.height = nextHeight;
+        // Place it here
+        partial.entries.push({
+          productId: product.id,
+          cases,
+          casesPerLayer,
+          caseHeight: layerHeight,
+        });
+        partial.usage = nextUsage;
+        partial.height = newPartialHeight;
+        palletLoad.height += heightIncrease;
         palletLoad.weightLb += cases * caseWeight;
         palletLoad.perProductLayers.set(product.id, currentLayers + 1);
 
         allocation.partialAssignments.push({ palletId: palletLoad.id, cases });
         allocation.totalWeightLb += cases * caseWeight;
         allocation.palletsInvolved.add(palletLoad.id);
+        placedInExisting = true;
+        break;
+      }
+
+      if (placedInExisting) {
         return true;
       }
 
-      const partial = palletLoad.partialLayer;
-      if (partial.entries.some((entry) => entry.productId === product.id)) {
-        continue;
-      }
-
-      if (!allowMixing) {
-        continue;
-      }
-
-      const nextUsage = casesPerLayer > 0
-        ? partial.usage + cases / casesPerLayer
-        : partial.usage + 1;
-      if (nextUsage > 1 + 1e-6) {
-        continue;
-      }
-
-      const currentPartialHeight = partial.height;
-      const newPartialHeight = Math.max(currentPartialHeight, layerHeight);
-      const heightWithoutPartial = palletLoad.height - currentPartialHeight;
-      const prospectiveHeight = heightWithoutPartial + newPartialHeight;
-      if (prospectiveHeight > pallet.maxLoadHeightIn) {
+      // 2. Try to add a new partial layer (vertical stacking)
+      const nextHeight = palletLoad.height + layerHeight;
+      if (nextHeight > pallet.maxLoadHeightIn) {
         continue;
       }
 
@@ -409,15 +416,19 @@ export const calculatePalletBreakdown = (
         continue;
       }
 
-      partial.entries.push({
-        productId: product.id,
-        cases,
-        casesPerLayer,
-        caseHeight: layerHeight,
+      palletLoad.partialLayers.push({
+        entries: [
+          {
+            productId: product.id,
+            cases,
+            casesPerLayer,
+            caseHeight: layerHeight,
+          },
+        ],
+        usage: casesPerLayer > 0 ? cases / casesPerLayer : 1,
+        height: layerHeight,
       });
-      partial.usage = nextUsage;
-      partial.height = newPartialHeight;
-      palletLoad.height = prospectiveHeight;
+      palletLoad.height = nextHeight;
       palletLoad.weightLb += cases * caseWeight;
       palletLoad.perProductLayers.set(product.id, currentLayers + 1);
 
@@ -466,9 +477,11 @@ export const calculatePalletBreakdown = (
     for (const productId of palletLoad.perProductLayers.keys()) {
       productIds.add(productId);
     }
-    if (palletLoad.partialLayer) {
-      for (const entry of palletLoad.partialLayer.entries) {
-        productIds.add(entry.productId);
+    if (palletLoad.partialLayers.length > 0) {
+      for (const layer of palletLoad.partialLayers) {
+        for (const entry of layer.entries) {
+          productIds.add(entry.productId);
+        }
       }
     }
 
@@ -482,13 +495,20 @@ export const calculatePalletBreakdown = (
         const fullLayers = palletLoad.fullLayerCounts.get(productId) ?? 0;
         const casesFromFullLayers = fullLayers * capacity.casesPerLayer;
 
-        const partialEntry = palletLoad.partialLayer?.entries.find(
-          (entry) => entry.productId === productId,
-        );
-        const partialCases = partialEntry?.cases ?? 0;
-        const partialHeightIn = partialEntry
-          ? Math.ceil(palletLoad.partialLayer?.height ?? 0)
-          : null;
+        let partialCases = 0;
+        let maxLayerHeight = 0;
+
+        if (palletLoad.partialLayers.length > 0) {
+          for (const layer of palletLoad.partialLayers) {
+            const entry = layer.entries.find(e => e.productId === productId);
+            if (entry) {
+              partialCases += entry.cases;
+              maxLayerHeight = Math.max(maxLayerHeight, layer.height);
+            }
+          }
+        }
+
+        const partialHeightIn = partialCases > 0 ? Math.ceil(maxLayerHeight) : null;
         const totalCases = casesFromFullLayers + partialCases;
 
         if (totalCases === 0) {
@@ -520,19 +540,21 @@ export const calculatePalletBreakdown = (
 
   const partialLayersByProduct = new Map<string, ProductPartialLayer[]>();
   for (const palletLoad of pallets) {
-    if (!palletLoad.partialLayer) {
+    if (palletLoad.partialLayers.length === 0) {
       continue;
     }
 
-    for (const entry of palletLoad.partialLayer.entries) {
-      if (!partialLayersByProduct.has(entry.productId)) {
-        partialLayersByProduct.set(entry.productId, []);
+    for (const layer of palletLoad.partialLayers) {
+      for (const entry of layer.entries) {
+        if (!partialLayersByProduct.has(entry.productId)) {
+          partialLayersByProduct.set(entry.productId, []);
+        }
+        partialLayersByProduct.get(entry.productId)?.push({
+          cases: entry.cases,
+          heightIn: Math.ceil(layer.height),
+          palletId: palletLoad.id,
+        });
       }
-      partialLayersByProduct.get(entry.productId)?.push({
-        cases: entry.cases,
-        heightIn: Math.ceil(palletLoad.partialLayer.height),
-        palletId: palletLoad.id,
-      });
     }
   }
 
