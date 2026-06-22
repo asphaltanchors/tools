@@ -81,7 +81,7 @@ export const PRODUCTS: Product[] = [
     id: "epx225",
     name: "EPX2 2.5lb 6-Tub",
     sku: "ADH-EPX2TUB2P5",
-    caseWeightLb: 44,
+    caseWeightLb: 18,
     caseDimensionsIn: { length: 10.25, width: 15, height: 5.5 },
   },
   {
@@ -92,7 +92,7 @@ export const PRODUCTS: Product[] = [
     caseDimensionsIn: { length: 17, width: 17, height: 8.25 },
   },
   {
-    id: "epxbags",
+    id: "epx2bags",
     name: "EPX2 6x12oz Bags Master Carton",
     sku: "82-5002.K",
     caseWeightLb: 36,
@@ -104,13 +104,6 @@ export const PRODUCTS: Product[] = [
     sku: "82-6002",
     caseWeightLb: 24,
     caseDimensionsIn: { length: 9, width: 6, height: 12 },
-  },
-  {
-    id: "epx2bags",
-    name: "EPX2 Case 6x6-12oz bags",
-    sku: "82-5002.K",
-    caseWeightLb: 36,
-    caseDimensionsIn: { length: 13, width: 10, height: 10 },
   },
 ];
 

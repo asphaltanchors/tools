@@ -35,7 +35,7 @@ export default function Home() {
                   Active Tools
                 </p>
                 <p className="text-2xl font-mono font-bold text-black mt-1">
-                  2
+                  3
                 </p>
               </div>
               <Activity className="h-8 w-8 text-gray-400" />
@@ -136,6 +136,30 @@ export default function Home() {
               </Link>
 
               <Link
+                href="/tools/margins"
+                className="group bg-white border-2 border-gray-900 rounded-lg p-6 transition-all hover:shadow-lg hover:scale-[1.02]"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <TrendingUp className="h-8 w-8 text-gray-700 group-hover:text-black" />
+                  <span className="text-xs font-mono font-bold text-green-600 bg-green-100 px-2 py-1 rounded">
+                    ACTIVE
+                  </span>
+                </div>
+                <h3 className="text-xl font-mono font-bold text-black mb-2">
+                  MARGIN//TRACK
+                </h3>
+                <p className="text-sm font-mono text-gray-600 mb-4">
+                  Landed cost, tariff, shipment, and gross margin tracker
+                </p>
+                <div className="flex items-center justify-between text-xs font-mono text-gray-500">
+                  <span>v0.1.0</span>
+                  <span className="text-black font-bold group-hover:underline">
+                    LAUNCH →
+                  </span>
+                </div>
+              </Link>
+
+              <Link
                 href="/tools/barcode"
                 className="group bg-white border-2 border-gray-900 rounded-lg p-6 transition-all hover:shadow-lg hover:scale-[1.02]"
               >
@@ -207,6 +231,17 @@ export default function Home() {
                       <span className="text-xs text-gray-500">2024.09.24</span>
                       <span className="text-black font-medium">
                         ITF-14 barcode generator launched
+                      </span>
+                    </div>
+                    <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                      FEATURE
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-2">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-gray-500">2026.05.13</span>
+                      <span className="text-black font-medium">
+                        Margin tracker added with D1 storage
                       </span>
                     </div>
                     <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">

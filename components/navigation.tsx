@@ -19,6 +19,7 @@ import {
   Database,
   Ruler,
   Weight,
+  TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -61,6 +62,12 @@ const navigationItems = [
   {
     category: "TOOLS",
     items: [
+      {
+        name: "MARGIN TRACK",
+        href: "/tools/margins",
+        icon: TrendingUp,
+        status: "active",
+      },
       {
         name: "BARCODE GEN",
         href: "/tools/barcode",
