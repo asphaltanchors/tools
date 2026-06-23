@@ -9,17 +9,4 @@
 		"directory": ".open-next/assets",
 		"binding": "ASSETS",
 	},
-	"d1_databases": [
-		{
-			"binding": "MARGIN_DB",
-			"database_name": "tools-margin-tracker",
-			"database_id": "00000000-0000-0000-0000-000000000000",
-			"migrations_dir": "migrations",
-		},
-		{
-			"binding": "tools_margin_tracker",
-			"database_name": "tools-margin-tracker",
-			"database_id": "b4855d64-15b3-4291-a539-931e4ba9e7c7"
-		},
-	],
 }
